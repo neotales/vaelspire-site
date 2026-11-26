@@ -1,0 +1,64 @@
+# Vaelspire — Complete Dense Reference (llms-full.txt)
+
+Core repository: https://github.com/neotales/vaelspire
+Marketing & docs site repository: https://github.com/neotales/vaelspire-site
+Default branch: `dev` (never `main` or `master`)
+Toolchain: Rust 1.100.0, edition 2024, resolver 3
+Lints: `unsafe_code = "forbid"`, `missing_docs = "warn"`, `clippy::all = "warn"`, `clippy::pedantic = "warn"`
+Licensing: MIT (`LICENSE`) for Open-Core; proprietary `LICENSE-ENTERPRISE` for `enterprise/`.
+Release gate: Documentation in `neotales/vaelspire-site` (human guides, Roadmap, `/agents/*`, `/llms.txt`, `/llms-full.txt`) MUST be updated and verified before cutting any `vaelspire` release tag.
+Theme rule: Warm obsidian + dragon-ember crimson + molten gold/amber (+ Neotales purple for parent brand lockup). Strictly NO cyan anywhere.
+
+## Product Positioning
+- Security is 100% free (no SSO tax): Argon2id + bcrypt auto-upgrade, keyed BLAKE3 session/token digests, TOTP MFA, Passkeys/WebAuthn, API keys, CSRF/origin guards, RBAC, transactional append-only audit logs, Prometheus `/metrics`.
+- Two usage modes over one Rust codebase:
+  1. Embeddable MIT crates (Better-Auth style for Rust apps) over `neotales-dbapi`.
+  2. Single-binary `vaelspire` CLI + HTTP server with `/forward-auth` for Caddy, Traefik, and Nginx.
+- Vaelspire Enterprise (commercial): multi-region active-active geo-replication + residency pinning, WORM immutable audit storage (S3 Object Lock, Azure Immutable Blob, GCS Bucket Lock), multi-year audit retention + hash-chaining, real-time SIEM/OpenTelemetry streaming, workforce seat packs + CIAM MAU packs via offline Ed25519 licenses (never bricks logins on expiry), FIPS 140-3 builds, and third-party audits/SLAs.
+
+## Milestones / Roadmap
+- M1 (Complete): 6 MIT base crates (`vaelspire-core`, `vaelspire-auth`, `vaelspire-axum`, `vaelspire-email`, `vaelspire-store-sqlite`, `vaelspire-store-postgres`) over `neotales-dbapi`.
+- M2 (Complete): `vaelspire` single-binary `clap` CLI + Axum server (`/forward-auth`, `/metrics`, `/health`, `/ready`), quickstart/smoke scripts, Docker/Compose, Caddy/Traefik/Nginx templates, Astro Starlight site (`neotales/vaelspire-site`).
+- M3 (Next): OIDC/OAuth 2.0 Identity Provider (Discovery, JWKS, Auth Code + PKCE, Token/UserInfo/Introspect/Revoke) for Vaelsgard SSO, embedded SvelteKit (`adapter-static`) Core UI (`--features embed-ui`) + Enterprise external UI mode, isolated Rune desktop app (`apps/vaelspire-desktop`), Postgres CLI parity.
+- M4: OpenID Foundation OIDC Conformance CI, SAML 2.0 IdP, SCIM 2.0 Directory Sync, multi-tenant Organizations, Non-Human Identity (NHI)/AI agent delegation, Spire & Dragon logo.
+- M5: Vaelspire Enterprise (`enterprise/`): multi-region geo-replication & residency pinning, WORM Object Lock sinks, SIEM/OTel streaming, offline Ed25519 seat/region licensing.
+- M6: Vaelspire Cloud (Managed SaaS), revenue-funded third-party security audits, SOC 2 / ISO 27001, and FIPS 140-3 validated builds.
+
+## Workspace Crates
+- `crates/vaelspire-core`: Zero-I/O models (`Id` = UUIDv7, `Timestamp` = UTC OffsetDateTime, `User`, `Session`, `ApiKey`, `ApiKeyPrefix`, `MfaFactor`, `PasskeyRecord`, `Membership`, `MembershipStatus`, `Invitation`, `AuditEvent`, `Purpose`, `SEEDED_ROLES`), `AuthError` (`Unauthorized`, `NotFound`, `Invalid`, `Conflict`, `Store`, `Unsupported`), `AuthStore` trait. Features: `password`, `session`, `social`, `oidc`.
+- `crates/vaelspire-auth`: Workflows (`Auth`, `Call`, `Policy`, `SessionCache`, `ApiKeys`, `Secret`, `IssuedSession`, `SignInAttempt`, `SignInOutcome`, `hash_password`, `verify_password`, `token_digest`). Defaults: `password`, `session`. Optional: `apikeys`, `email-signin`, `mfa`, `passkey`, `social`, `oidc`.
+- `crates/vaelspire-axum`: Axum 0.8 `AuthRouter`, `AuthState`, `Paths`, `TokenKind`, `DEFAULT_SESSION_COOKIE` (`neotales.session`), `DEFAULT_CSRF_COOKIE` (`neotales.csrf`). Same feature flags as `vaelspire-auth`.
+- `crates/vaelspire-email`: `Message` (Zeroizing + redacted Debug), async `Sender` trait (blanket impl for closures), optional `SmtpSender` (`feature = "smtp"`, `lettre` + rustls).
+- `crates/vaelspire-store-sqlite`: SQLite `AuthStore` over `neotales-dbapi = "=0.0.0-alpha.0"` + `neotales-migration-sqlite = "=0.0.0-alpha.0"`. Net-new migration guard (`auth_schema_history`), append-only audit triggers.
+- `crates/vaelspire-store-postgres`: PostgreSQL 17+ `AuthStore` over `neotales-dbapi-postgres = "=0.0.0-alpha.0"` + `neotales-migration-postgres = "=0.0.0-alpha.0"`. Advisory-locked migrations, shared `crates/conformance.rs`.
+- `crates/vaelspire`: Single-binary `clap` CLI (`serve`, `migrate`, `keygen`, `admin bootstrap`) + Axum HTTP server (`/health`, `/ready`, `/metrics`, `/.well-known/vaelspire`, `/forward-auth`, plus mounted `AuthRouter`).
+
+## Critical Security & Engineering Invariants
+1. Library crates NEVER log; return typed `AuthError`. Only `crates/vaelspire` binary configures `tracing`.
+2. NEVER run Argon2 on an async Tokio worker. Split `begin_sign_in` -> `spawn_blocking(verify_password)` -> `finish_sign_in`.
+3. `AuthRouter::new(store, tenant, digest_key, cookie_secure)` has NO default for `cookie_secure`. Pass `true` behind TLS, `false` only for local plain HTTP.
+4. Token-minting routes (`/email/verify/request`, `/password/reset/request`, `/email/sign-in/request`, `/invitations`) return `404` unless `.on_proof(...)` is wired.
+5. State-changing routes enforce `Origin` allow-list (default: localhost / 127.0.0.1 / [::1] only; empty list refuses all) AND double-submit CSRF (`neotales.csrf` cookie == `x-csrf-token` header).
+6. Digest format: keyed BLAKE3 (`key = 32 bytes`, input = `domain || 0x00 || token`). DB stores `0x01 || digest_32`. Domains: `session`, `verify_email`, `reset_password`, `email_otp`, `api_key`, `invitation`, `mfa-recovery`.
+7. Wrap secrets in `Zeroizing` / `Secret`; never put credentials or tokens in `AuditEvent` or logs.
+
+## `/forward-auth` Contract
+- Accepts any HTTP method on `/forward-auth`.
+- Checks: (1) session cookie (`VAELSPIRE_SESSION_COOKIE`, default `neotales.session`), else (2) `Authorization: Bearer <key>`, else (3) `X-API-Key: <key>`.
+- On allow (`200 OK`, `Cache-Control: no-store`):
+  - `X-Vaelspire-User-Id`
+  - `X-Vaelspire-Tenant-Id`
+  - `X-Vaelspire-Email`
+  - `X-Vaelspire-Auth-Method` (`session` | `api_key`)
+  - `X-Vaelspire-Session-Id` (session) or `X-Vaelspire-Api-Key-Id` (api_key)
+- On deny (`Cache-Control: no-store`): `401 Unauthorized` `{"error":"unauthorized"}` (or `302 Found` to static server-configured `VAELSPIRE_FORWARD_AUTH_LOGIN_URL`; never accepts untrusted query redirects).
+
+## Quick Local Commands
+- One-command setup: `./scripts/dev-setup.sh`
+- Start server: `./scripts/quickstart.sh`
+- Live HTTP smoke check: `./scripts/smoke-test.sh`
+- Rust gates:
+  - `cargo fmt --all -- --check`
+  - `cargo clippy --workspace --all-targets --offline -- -D warnings`
+  - `cargo test --workspace --exclude vaelspire-store-postgres --exclude vaelspire-email --offline`
+- Docs site (`~/work/vaelspire-site`): `pnpm install && pnpm build`

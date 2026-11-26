@@ -1,0 +1,51 @@
+---
+title: Vaelspire
+description: Ultra-lightweight Rust open-core identity and authentication platform by Neotales. Security is free; pay only for global scale, WORM storage, and compliance.
+template: splash
+hero:
+  tagline: Ultra-lightweight Rust identity & auth by Neotales. Embed modular crates in your app or deploy one fast binary behind Caddy, Traefik, or Nginx — zero SSO tax.
+  actions:
+    - text: 60-Second Quickstart
+      link: /getting-started/quickstart/
+      icon: right-arrow
+    - text: Explore Enterprise
+      link: /enterprise/overview/
+      icon: star
+      variant: secondary
+    - text: Public Roadmap
+      link: /roadmap/
+      variant: minimal
+    - text: AI Agent Docs (Dense)
+      link: /agents/
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+<p style="text-align: center; margin: 1.5rem 0 2.5rem;">
+  <img src="/images/vaelspire-architecture.svg" alt="Vaelspire Architecture — Open-Core Rust Identity & Authentication Platform by Neotales" style="width: 100%; max-width: 960px; border-radius: 14px;" />
+</p>
+
+## Security Is Free. Scale & Compliance Are Enterprise.
+
+<CardGrid stagger>
+  <Card title="🛡️ Zero SSO Tax (MIT Core)" icon="approve-check">
+    Argon2id + legacy bcrypt auto-upgrade, keyed BLAKE3 session digests, TOTP MFA, Passkeys/WebAuthn, API keys, CSRF & origin guards, RBAC, and transactional audit trails are **100% free and MIT-licensed**.
+  </Card>
+  <Card title="🧩 Embed Like Better Auth — In Rust" icon="puzzle">
+    Do not want a separate auth service? Drop `vaelspire-auth`, `vaelspire-axum`, and `vaelspire-store-sqlite` or `vaelspire-store-postgres` directly into your Rust binary over `neotales-dbapi`.
+  </Card>
+  <Card title="⚡ Single Binary + /forward-auth" icon="rocket">
+    Run one `#![forbid(unsafe_code)]` Rust binary with embedded SQLite and protect **Vaelsgard** or any HTTP backend in 3 lines of Caddy, Traefik, or Nginx config.
+  </Card>
+  <Card title="🏢 Built to Grow Into Enterprise" icon="setting">
+    Upgrade seamlessly when you need **multi-region geo-replication**, **WORM immutable audit storage** (S3 Object Lock / Azure / GCS), **SIEM & OTel telemetry**, seat packs, and **FIPS 140-3**.
+  </Card>
+</CardGrid>
+
+---
+
+## Built for Humans and AI Coding Agents
+
+- **Humans:** Follow the [60-Second Quickstart](/getting-started/quickstart/), wire up [Forward-Auth](/guides/forward-auth/), check the [Public Roadmap](/roadmap/), or explore [Vaelspire Enterprise](/enterprise/overview/).
+- **AI Agents:** Read the dense, zero-fluff [Agent Orientation](/agents/), [HTTP & CLI Contract](/agents/api-reference/), and [Rust Crate Recipes](/agents/crate-recipes/), or fetch [`/llms.txt`](/llms.txt) / [`/llms-full.txt`](/llms-full.txt) directly.

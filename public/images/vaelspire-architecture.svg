@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 280" width="960" height="280" role="img" aria-label="Vaelspire Architecture: Open-Core Identity and Authentication Platform by Neotales">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c0a09"/>
+      <stop offset="55%" stop-color="#1c1412"/>
+      <stop offset="100%" stop-color="#17120e"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#dc2626"/>
+      <stop offset="50%" stop-color="#ea580c"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1f1916" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#14110f" stop-opacity="0.95"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="280" rx="16" fill="url(#bg)"/>
+  <rect x="1.5" y="1.5" width="957" height="277" rx="15" fill="none" stroke="#44403c" stroke-width="1.5"/>
+
+  <!-- Placeholder spire badge until final Spire & Dragon logo lands -->
+  <g transform="translate(38, 36)">
+    <rect width="62" height="62" rx="14" fill="#1c1410" stroke="url(#accent)" stroke-width="2"/>
+    <path d="M31 10 L39 30 L36 30 L42 50 L20 50 L26 30 L23 30 Z" fill="url(#accent)"/>
+    <circle cx="31" cy="24" r="3" fill="#0c0a09"/>
+  </g>
+
+  <text x="118" y="64" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif" font-size="34" font-weight="800" fill="#fafaf9">Vaelspire</text>
+  <text x="278" y="64" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif" font-size="14" font-weight="600" fill="#a855f7">by Neotales</text>
+  <text x="118" y="90" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif" font-size="15" fill="#d6d3d1">Ultra-lightweight Rust Open-Core Identity &amp; Auth — Security Free, Enterprise Scale Paid</text>
+
+  <!-- Pillar 1: Embeddable Crates -->
+  <g transform="translate(38, 124)">
+    <rect width="276" height="122" rx="12" fill="url(#card)" stroke="#ea580c" stroke-opacity="0.5"/>
+    <text x="18" y="30" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="700" fill="#fb923c">1. Embeddable Crates (MIT)</text>
+    <text x="18" y="54" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#f5f5f4">vaelspire-core · vaelspire-auth</text>
+    <text x="18" y="74" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#f5f5f4">vaelspire-axum · vaelspire-email</text>
+    <text x="18" y="94" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#a8a29e">sqlite &amp; postgres via neotales-dbapi</text>
+    <text x="18" y="112" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#78716c">Argon2id · BLAKE3 · MFA · Passkeys · RBAC</text>
+  </g>
+
+  <!-- Pillar 2: Single-Binary Server -->
+  <g transform="translate(342, 124)">
+    <rect width="276" height="122" rx="12" fill="url(#card)" stroke="#10b981" stroke-opacity="0.45"/>
+    <text x="18" y="30" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="700" fill="#34d399">2. Single-Binary Server (MIT)</text>
+    <text x="18" y="54" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#f5f5f4">vaelspire serve · migrate · keygen</text>
+    <text x="18" y="74" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#f5f5f4">/forward-auth · /metrics · /health</text>
+    <text x="18" y="94" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#a8a29e">Caddy · Traefik · Nginx ready</text>
+    <text x="18" y="112" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#78716c">Zero SSO tax · Runs on a $5 VPS</text>
+  </g>
+
+  <!-- Pillar 3: Enterprise -->
+  <g transform="translate(646, 124)">
+    <rect width="276" height="122" rx="12" fill="url(#card)" stroke="#f59e0b" stroke-opacity="0.55"/>
+    <text x="18" y="30" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="700" fill="#fbbf24">3. Vaelspire Enterprise</text>
+    <text x="18" y="54" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#f5f5f4">Multi-region active-active geo-rep</text>
+    <text x="18" y="74" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#f5f5f4">WORM immutable audit storage</text>
+    <text x="18" y="94" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#f5f5f4">SIEM / OTel telemetry · Seat packs</text>
+    <text x="18" y="112" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#f59e0b">FIPS 140-3 · Third-party audits · SLAs</text>
+  </g>
+</svg>

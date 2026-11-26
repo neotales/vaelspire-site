@@ -1,0 +1,53 @@
+/* Vaelspire product palette: warm obsidian + dragon-ember crimson + molten brass/amber-gold.
+ * Distinct from Neotales's purple house brand; strictly NO cyan anywhere in dark or light themes. */
+:root {
+  --sl-color-accent-low: #3b1d0a;
+  --sl-color-accent: #d97706;
+  --sl-color-accent-high: #fde68a;
+
+  /* Override Starlight's default blue/note semantic hues to warm molten brass/amber (zero cyan/blue). */
+  --sl-color-blue-low: #3b1d0a;
+  --sl-color-blue: #d97706;
+  --sl-color-blue-high: #fde68a;
+
+  /* Keep emerald for success/check accents and crimson-ember for danger/caution. */
+  --sl-color-green-low: #0b2e22;
+  --sl-color-green: #10b981;
+  --sl-color-green-high: #a7f3d0;
+  --sl-color-orange-low: #3c1808;
+  --sl-color-orange: #ea580c;
+  --sl-color-orange-high: #fed7aa;
+  --sl-color-red-low: #3b0d0c;
+  --sl-color-red: #dc2626;
+  --sl-color-red-high: #fecaca;
+
+  --sl-color-white: #fafaf9;
+  --sl-color-gray-1: #e7e5e4;
+  --sl-color-gray-2: #d6d3d1;
+  --sl-color-gray-3: #a8a29e;
+  --sl-color-gray-4: #57534e;
+  --sl-color-gray-5: #292524;
+  --sl-color-gray-6: #1c1917;
+  --sl-color-black: #0c0a09;
+}
+
+:root[data-theme='light'] {
+  --sl-color-accent-low: #fef3c7;
+  --sl-color-accent: #b45309;
+  --sl-color-accent-high: #78350f;
+
+  --sl-color-blue-low: #fef3c7;
+  --sl-color-blue: #b45309;
+  --sl-color-blue-high: #78350f;
+}
+
+.vaelspire-badge-neotales {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: rgba(168, 85, 247, 0.16);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.4);
+}

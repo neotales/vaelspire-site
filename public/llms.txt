@@ -1,0 +1,25 @@
+# Vaelspire
+
+> Ultra-lightweight Rust open-core identity and authentication platform by Neotales. Embed modular MIT crates in your Rust app or run one static binary with `/forward-auth`, Prometheus `/metrics`, and SQLite/PostgreSQL over `neotales-dbapi`. Security is 100% free; Enterprise adds multi-region geo-replication, WORM immutable audit storage, SIEM/OpenTelemetry pipelines, license seats, and FIPS 140-3.
+
+- Core repository: https://github.com/neotales/vaelspire
+- Marketing & documentation site repository: https://github.com/neotales/vaelspire-site
+- Release rule: Documentation in `neotales/vaelspire-site` must be updated and verified before cutting any `vaelspire` release tag.
+
+## Quick Links
+
+- [60-Second Quickstart](/getting-started/quickstart/): One-command setup (`./scripts/dev-setup.sh`, `./scripts/quickstart.sh`, `./scripts/smoke-test.sh`)
+- [Configuration & CLI](/getting-started/configuration/): `vaelspire` CLI subcommands and `VAELSPIRE_*` env vars
+- [Deployment & Reverse Proxies](/getting-started/deployment/): Docker Compose + Caddy, Traefik, Nginx `/forward-auth`
+- [Embeddable Rust Crates](/guides/embedded-crates/): `vaelspire-core`, `vaelspire-auth`, `vaelspire-axum`, `vaelspire-email`, `vaelspire-store-sqlite`, `vaelspire-store-postgres`
+- [Forward-Auth Guide](/guides/forward-auth/): Session cookie & API-key verification and `X-Vaelspire-*` identity headers
+- [Security Architecture](/guides/security-architecture/): Argon2id, keyed BLAKE3 digests, fail-closed cookies/origin/CSRF, transactional audit
+- [Vaelspire Enterprise](/enterprise/overview/): Geo-replication, WORM storage, SIEM telemetry, offline Ed25519 seat licensing, FIPS 140-3
+- [Public Roadmap](/roadmap/): Milestones M1 through M6 (OIDC IdP, Embedded UI, Rune Desktop, SAML/SCIM, Enterprise, Managed Cloud & FIPS)
+
+## Dense AI Agent Documentation
+
+- [Agent Orientation & Invariants](/agents/): Workspace crate graph, feature matrix, security invariants, verification commands
+- [HTTP & CLI Contract](/agents/api-reference/): Exact routes, headers, cookies, status codes, Prometheus metrics, CLI flags
+- [Rust Crate Recipes](/agents/crate-recipes/): API-exact Rust snippets for Axum mount, off-worker Argon2, API keys, Postgres
+- [Full Dense Single-File Reference](/llms-full.txt): Complete plain-markdown reference in one request
