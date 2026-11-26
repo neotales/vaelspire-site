@@ -88,3 +88,13 @@ Embedded UI (`--features embed-ui` + `--ui-mode embedded`):
 - `vaelspire-worm`: `WormAuditSink: AuditSink` with SHA-256 hash-chaining (`ChainedAuditRecord`, `verify_chain`) + `build_archive` for `S3ObjectLock`, `AzureImmutableBlob`, `GcsBucketLock`.
 - `vaelspire-telemetry`: `SiemTelemetrySink: TelemetrySink` bounded non-blocking queue with `ExportFormat::{OtlpJson, SplunkHecNdjson, DatadogLogsJson}` + `TelemetryStats`.
 - `vaelspire-georep`: `ResidencyPolicy: RegionPolicy` (EU/US/APAC pinning + `check_local_write`) and `ReplicationLogHook: ReplicationHook` (`ReplicationEnvelope`, `read_since`).
+
+---
+
+## 5. Planned Architecture Milestones (Pre-v0.1.0 & M4–M4.5)
+
+- **GDPR & Log Redaction:** Log `user_id` + masked email (`wf******@domain.com`, configurable `masked|id-only|full`), Right to Erasure preserving append-only `auth_audit` via pseudonymous `actor_id`, Right of Access JSON export, IP retention/truncation (`/24` IPv4, `/48` IPv6), expanded bounded-cardinality `/metrics`.
+- **Sessions & Anomaly Detection:** Sliding (`session_idle_timeout` + throttled `session_refresh_window`) AND hard absolute (`session_absolute_timeout`) session expirations; explicit `--ip-source` + `--trusted-proxies`; per-IP password-spray, unseen device/IP, refresh-token reuse, and optional GeoLite2 impossible-travel alerts.
+- **Passkeys, Per-App RBAC & Management CLI:** Wire `passkey` feature + `--rp-id`/`--rp-origin` into server & SvelteKit UI; nullable `app_id` on roles & permissions + `auth_role_permission` + `auth_group_role`; dual-mode (local DB & remote API) CLI for `user`, `org`, `client`, `role`, `perm`, `group`, `api-key`, `audit`, `status`.
+- **Self-Service Org IdP & Directory Sync:** DNS-verified domains, per-org email policies (`allow_public`, `business_domains_only`, `verified_domains_only`), Home Realm Discovery, delegated org SSO portal (OIDC/SAML + test mode + break-glass admin), and SCIM 2.0 `/scim/v2/Groups`.
+- **Cloudflare & Kubernetes:** `wasm32`-clean `vaelspire-core`/`vaelspire-verify`, Cloudflare D1 `AuthStore` (`vaelspire-store-d1`) + Workers edge runtime for low-cost serverless hosting, Cloudflare Containers for native static binary, plus official Helm chart & Kubernetes manifests.
