@@ -1,6 +1,6 @@
 ---
 title: Vaelspire Roadmap
-description: Public milestone roadmap for Vaelspire Core (MIT) and Vaelspire Enterprise — from embeddable Rust crates and /forward-auth to OIDC IdP, Rune desktop, geo-replication, WORM storage, and FIPS 140-3.
+description: Public milestone roadmap for Vaelspire Core (MIT) and Vaelspire Enterprise — from embeddable Rust crates and /forward-auth to OIDC IdP, embedded SvelteKit UI, SCIM 2.0, Enterprise WORM/geo-replication, and FIPS 140-3.
 ---
 
 Vaelspire is built in focused, shippable milestones — **dogfooding our own apps (including Vaelsgard) first**, keeping core security **100% free and MIT-licensed**, and funding formal enterprise compliance through real commercial adoption.
@@ -23,47 +23,45 @@ Vaelspire is built in focused, shippable milestones — **dogfooding our own app
 - Single-binary `vaelspire` (`clap` CLI + Axum HTTP server): `serve`, `migrate`, `keygen`, `admin bootstrap`.
 - Reverse-proxy `/forward-auth` verifying session cookies and API keys (`Authorization: Bearer` / `X-API-Key`) and emitting trusted `X-Vaelspire-*` identity headers.
 - Built-in Prometheus `/metrics`, `/health`, `/ready`, and `/.well-known/vaelspire`.
-- Zero-friction setup scripts (`scripts/dev-setup.sh`, `scripts/quickstart.sh`, `scripts/smoke-test.sh`), multi-stage Docker + Compose, and Caddy / Traefik / Nginx Forward-Auth templates.
+- Zero-friction setup scripts (`scripts/dev-setup.sh`, `scripts/quickstart.sh`, `scripts/smoke-test.sh`, `scripts/demo.sh`), multi-stage Docker + Compose, and Caddy / Traefik / Nginx Forward-Auth templates.
 - Dedicated Astro Starlight marketing & documentation repository (`neotales/vaelspire-site`) with human guides and dense AI agent reference (`/agents/`, `/llms.txt`, `/llms-full.txt`).
 
 ---
 
-## 🔨 M3 — OIDC Identity Provider, Embedded Core UI & Rune Desktop *(Next)*
+## ✅ M3 — OIDC 1.0 Identity Provider, Stateless Verifier & Embedded Core UI *(Core Shipped)*
 
-- **OIDC / OAuth 2.0 Identity Provider (IdP):**
-  - `/.well-known/openid-configuration` & rotating Ed25519 / ES256 JWKS endpoint
-  - Authorization Code + PKCE (`/oauth2/authorize`, `/oauth2/token`), `/oauth2/userinfo`, `/oauth2/introspect`, `/oauth2/revoke`
-  - OAuth client registry & consent screen for first-class **Vaelsgard** and third-party app SSO
-  - Thin stateless JWKS verifier crate (`vaelspire-verify`) for zero-hop local token validation
-- **Embedded Web UI (Core) & External UI Mode (Enterprise):**
-  - SvelteKit (`adapter-static`) + `shadcn-svelte` + Tailwind login, registration, MFA, Passkey, consent, and Core Admin UI
-  - Embedded into the `vaelspire` Core binary behind `--features embed-ui`, with `--ui=external` mode for Enterprise CDN / white-label deployments
-- **Native Desktop Companion App (`Rune`):**
-  - Isolated workspace crate (`apps/vaelspire-desktop`) built with **Rune** (`anomalyco/rune`) for local operator management without pulling GPU dependencies into the headless `vaelspire` server binary
-- **PostgreSQL CLI Flag Parity:**
-  - Wire `--database-url postgres://...` directly into `vaelspire serve` and `vaelspire migrate` alongside SQLite
-
----
-
-## 🧭 M4 — Standards Conformance, SAML 2.0, SCIM 2.0 & Organizations
-
-- **OpenID Foundation OIDC Conformance Suite** automated in CI with published conformance badge
-- **SAML 2.0 IdP** for legacy enterprise applications
-- **SCIM 2.0 Directory Sync** (automated user/group provisioning & deprovisioning)
-- **Multi-Tenant Organizations & Delegated Org Admin Portals** (WorkOS-style B2B SaaS ergonomics — free core security, org governance at scale)
-- **Non-Human Identity (NHI) / Service Account & AI Agent Scoped Delegation** (short-lived tokens, explicit scope attenuation, audit attribution)
-- **Brand Identity:** Official fantasy **Spire & Dragon** vector logo and wordmark lockups
+- **OIDC 1.0 / OAuth 2.0 Identity Provider (`vaelspire-oidc` + server routes):**
+  - `/.well-known/openid-configuration` & rotating `EdDSA` (`Ed25519`) JWKS with RFC 7638 thumbprints
+  - Authorization Code + PKCE `S256` (`/oauth2/authorize`, `/oauth2/token`), Refresh Token Rotation with family reuse revocation, `/oauth2/userinfo`, `/oauth2/introspect`, `/oauth2/revoke`
+  - OIDC Client Registry (`/admin/oidc/clients`) with exact-match redirect URIs and keyed BLAKE3 secrets for **Vaelsgard** and third-party SSO
+  - Thin zero-DB stateless JWKS verifier crate (`vaelspire-verify`)
+- **Embedded Web UI (`ui/` + `--features embed-ui`) & External UI Mode:**
+  - SvelteKit (`adapter-static`) + Tailwind console (Overview, Login, Register, OIDC Consent, Account/Sessions/API Keys, Core Admin Console)
+  - Runtime `--ui-mode embedded|external|api-only` toggle for Core vs. Enterprise CDN deployments
+- **Desktop Companion Architecture (`apps/vaelspire-desktop`):**
+  - Isolated **Rune** (`anomalyco/rune`) desktop companion specification cleanly separated from the headless server binary *(implementation tracks Rune's upstream pre-release stabilization)*
+- **Next polish before `v0.1.0`:** Wire `--database-url postgres://...` directly into `vaelspire serve` / `migrate` alongside SQLite.
 
 ---
 
-## 🏢 M5 — Vaelspire Enterprise (`enterprise/`)
+## 🔨 M4 — SCIM 2.0, Non-Human Identity (NHI), SAML & Standards Conformance *(Core Shipped, Hardening In Progress)*
 
-Commercial capabilities gated cleanly behind `vaelspire-core` trait seams and `LICENSE-ENTERPRISE`:
+- ✅ **SCIM 2.0 Directory Sync (RFC 7644):** `/scim/v2/ServiceProviderConfig` and `/scim/v2/Users` (list, create, fetch, soft-delete)
+- ✅ **Non-Human Identity (NHI) / AI Agent Scoped Delegation:** OAuth 2.0 `client_credentials` with strict `allowed_scopes` attenuation and short-lived `EdDSA` tokens
+- ✅ **SAML 2.0 IdP Metadata:** `/saml/metadata` (`EntityDescriptor` XML)
+- 🧭 **Next:** Full SAML 2.0 assertion signing, OpenID Foundation OIDC Conformance Suite in CI with badge, delegated multi-org admin portals, and commissioning the official fantasy **Spire & Dragon** vector logo.
 
-- **Multi-Region Active-Active Geo-Replication:** Unlimited regions, global low-latency session/revocation sync, and per-tenant **data-residency pinning** (EU / US / APAC)
-- **WORM Immutable Audit Storage:** Write-Once-Read-Many archival to **AWS S3 Object Lock**, **Azure Immutable Blob**, and **GCS Bucket Lock** (SEC 17a-4 / FINRA / HIPAA), plus multi-year hash-chained retention & auditor export portal
-- **Enterprise Telemetry & Real-Time SIEM Streaming:** Native OpenTelemetry distributed tracing + streaming connectors for Splunk, Datadog, Microsoft Sentinel, CrowdStrike, and Kafka
-- **Offline Ed25519 Licensing:** Air-gapped signed license files covering region limits, workforce seat packs, and separate high-volume CIAM MAU packs — with a strict **never-brick-logins** graceful enforcement guarantee
+---
+
+## ✅ M5 — Vaelspire Enterprise Foundations (`enterprise/`) *(Core Modules Implemented)*
+
+Isolated proprietary Cargo workspace (`enterprise/Cargo.toml`, governed by `LICENSE-ENTERPRISE`) implementing `vaelspire-core::extensions`:
+
+- ✅ **`vaelspire-license`:** Offline Ed25519 `.vlic` signing & verification (`LicenseGate`) with guaranteed **never-brick-logins** graceful expiry (`allows_login() == true` always)
+- ✅ **`vaelspire-worm`:** Tamper-evident SHA-256 hash-chained `AuditSink` + chain verifier + cloud Object Lock payload builders (**AWS S3 Object Lock**, **Azure Immutable Blob**, **GCS Bucket Lock**)
+- ✅ **`vaelspire-telemetry`:** Bounded, non-blocking `TelemetrySink` with **OpenTelemetry OTLP JSON**, **Splunk HEC NDJSON**, and **Datadog Logs** batch formatters
+- ✅ **`vaelspire-georep`:** Lock-free EU/US/APAC tenant data-residency pinning (`RegionPolicy`) + ordered cross-region replication outbox envelopes (`ReplicationHook`)
+- 🧭 **Next:** Wire live HTTP/mTLS transport daemons for cloud bucket uploaders, SIEM push workers, and peer-region active-active sync.
 
 ---
 

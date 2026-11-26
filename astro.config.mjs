@@ -7,7 +7,7 @@ export default defineConfig({
     starlight({
       title: 'Vaelspire',
       description:
-        'Ultra-lightweight Rust open-core identity and authentication platform by Neotales — embeddable crates, single-binary /forward-auth server, and Enterprise geo-replication & WORM compliance.',
+        'Ultra-lightweight Rust open-core identity and authentication platform by Neotales — embeddable crates, single-binary OIDC 1.0 IdP & /forward-auth server, embedded Web UI, and Enterprise geo-replication & WORM compliance.',
       favicon: '/favicon.svg',
       customCss: ['./src/styles/vaelspire.css'],
       social: [
@@ -24,21 +24,33 @@ export default defineConfig({
             { label: '60-Second Quickstart', slug: 'getting-started/quickstart' },
             { label: 'Configuration & CLI', slug: 'getting-started/configuration' },
             { label: 'Deployment & Reverse Proxies', slug: 'getting-started/deployment' },
+            { label: 'How Vaelspire Compares', slug: 'guides/comparisons' },
           ],
         },
         {
-          label: 'Guides',
+          label: 'Core Platform Guides',
           items: [
-            { label: 'Embeddable Rust Crates', slug: 'guides/embedded-crates' },
+            { label: 'OIDC 1.0 IdP & SSO', slug: 'guides/oidc-idp' },
+            { label: 'SCIM 2.0, SAML & AI Agents', slug: 'guides/scim-and-nhi' },
             { label: 'Forward-Auth Integration', slug: 'guides/forward-auth' },
+            { label: 'Embedded Web UI & Desktop', slug: 'guides/web-ui' },
+            { label: 'Embeddable Rust Crates', slug: 'guides/embedded-crates' },
             { label: 'Security Architecture', slug: 'guides/security-architecture' },
           ],
         },
         {
-          label: 'Product & Enterprise',
+          label: 'Reference & Operations',
           items: [
-            { label: 'Vaelspire Enterprise', slug: 'enterprise/overview' },
+            { label: 'Rust Crate Reference', slug: 'reference/crates' },
+            { label: 'Release & Docs Policy', slug: 'guides/releasing' },
             { label: 'Public Roadmap', slug: 'roadmap' },
+          ],
+        },
+        {
+          label: 'Vaelspire Enterprise',
+          items: [
+            { label: 'Enterprise Overview', slug: 'enterprise/overview' },
+            { label: 'WORM, Geo-Rep & Offline Licensing', slug: 'enterprise/licensing-and-worm' },
           ],
         },
         {
@@ -47,6 +59,7 @@ export default defineConfig({
           items: [
             { label: 'Agent Orientation & Invariants', slug: 'agents' },
             { label: 'HTTP & CLI Contract', slug: 'agents/api-reference' },
+            { label: 'OIDC, SCIM & Enterprise Contract', slug: 'agents/oidc-and-scim' },
             { label: 'Rust Crate Recipes', slug: 'agents/crate-recipes' },
           ],
         },

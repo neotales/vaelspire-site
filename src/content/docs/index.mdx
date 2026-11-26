@@ -1,19 +1,19 @@
 ---
 title: Vaelspire
-description: Ultra-lightweight Rust open-core identity and authentication platform by Neotales. Security is free; pay only for global scale, WORM storage, and compliance.
+description: Ultra-lightweight Rust open-core identity and authentication platform by Neotales. Embeddable crates, single-binary OIDC 1.0 IdP + /forward-auth + SCIM 2.0 + embedded Web UI, and Enterprise WORM & geo-replication.
 template: splash
 hero:
-  tagline: Ultra-lightweight Rust identity & auth by Neotales. Embed modular crates in your app or deploy one fast binary behind Caddy, Traefik, or Nginx — zero SSO tax.
+  tagline: Ultra-lightweight Rust identity & auth by Neotales. Embed modular crates in your app or run one single binary with OIDC 1.0 SSO, /forward-auth, SCIM 2.0, and an embedded Web UI — zero SSO tax.
   actions:
     - text: 60-Second Quickstart
       link: /getting-started/quickstart/
       icon: right-arrow
-    - text: Explore Enterprise
-      link: /enterprise/overview/
-      icon: star
+    - text: OIDC 1.0 & SSO Guide
+      link: /guides/oidc-idp/
+      icon: rocket
       variant: secondary
-    - text: Public Roadmap
-      link: /roadmap/
+    - text: How Vaelspire Compares
+      link: /guides/comparisons/
       variant: minimal
     - text: AI Agent Docs (Dense)
       link: /agents/
@@ -30,16 +30,16 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 
 <CardGrid stagger>
   <Card title="🛡️ Zero SSO Tax (MIT Core)" icon="approve-check">
-    Argon2id + legacy bcrypt auto-upgrade, keyed BLAKE3 session digests, TOTP MFA, Passkeys/WebAuthn, API keys, CSRF & origin guards, RBAC, and transactional audit trails are **100% free and MIT-licensed**.
+    Argon2id + legacy bcrypt auto-upgrade, TOTP MFA, Passkeys/WebAuthn, **OIDC 1.0 IdP (Ed25519 JWKS + PKCE + Refresh Rotation)**, **SCIM 2.0**, **AI Agent NHI**, RBAC, and `/forward-auth` are **100% free and MIT-licensed**.
   </Card>
   <Card title="🧩 Embed Like Better Auth — In Rust" icon="puzzle">
-    Do not want a separate auth service? Drop `vaelspire-auth`, `vaelspire-axum`, and `vaelspire-store-sqlite` or `vaelspire-store-postgres` directly into your Rust binary over `neotales-dbapi`.
+    Do not want an extra auth service? Embed `vaelspire-auth`, `vaelspire-axum`, `vaelspire-verify`, and SQLite/PostgreSQL stores directly into your Rust binary over `neotales-dbapi`.
   </Card>
-  <Card title="⚡ Single Binary + /forward-auth" icon="rocket">
-    Run one `#![forbid(unsafe_code)]` Rust binary with embedded SQLite and protect **Vaelsgard** or any HTTP backend in 3 lines of Caddy, Traefik, or Nginx config.
+  <Card title="⚡ Single Binary + Embedded Web UI" icon="rocket">
+    Compile `--features embed-ui` for one fast `#![forbid(unsafe_code)]` Rust binary with built-in Login, OIDC Consent, Account/API Keys, and Admin Console — or switch to `--ui-mode external` for Enterprise CDNs.
   </Card>
-  <Card title="🏢 Built to Grow Into Enterprise" icon="setting">
-    Upgrade seamlessly when you need **multi-region geo-replication**, **WORM immutable audit storage** (S3 Object Lock / Azure / GCS), **SIEM & OTel telemetry**, seat packs, and **FIPS 140-3**.
+  <Card title="🏢 Isolated Enterprise Modules" icon="setting">
+    Upgrade seamlessly via `vaelspire-core::extensions` when you need **EU/US/APAC geo-replication**, **hash-chained WORM storage** (S3 Object Lock / Azure / GCS), **OTLP/Splunk/Datadog SIEM**, and **never-brick-logins** offline Ed25519 licensing.
   </Card>
 </CardGrid>
 
@@ -47,5 +47,5 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 
 ## Built for Humans and AI Coding Agents
 
-- **Humans:** Follow the [60-Second Quickstart](/getting-started/quickstart/), wire up [Forward-Auth](/guides/forward-auth/), check the [Public Roadmap](/roadmap/), or explore [Vaelspire Enterprise](/enterprise/overview/).
-- **AI Agents:** Read the dense, zero-fluff [Agent Orientation](/agents/), [HTTP & CLI Contract](/agents/api-reference/), and [Rust Crate Recipes](/agents/crate-recipes/), or fetch [`/llms.txt`](/llms.txt) / [`/llms-full.txt`](/llms-full.txt) directly.
+- **Humans:** Start with the [60-Second Quickstart](/getting-started/quickstart/), configure [OIDC 1.0 SSO](/guides/oidc-idp/) or [Forward-Auth](/guides/forward-auth/), compare [Vaelspire vs. Authentik/Keycloak/Auth0/WorkOS](/guides/comparisons/), inspect the [Crate Reference](/reference/crates/), or explore [Vaelspire Enterprise](/enterprise/overview/).
+- **AI Agents:** Read the dense, zero-fluff [Agent Orientation](/agents/), [HTTP & CLI Contract](/agents/api-reference/), [OIDC, SCIM & Enterprise Contract](/agents/oidc-and-scim/), and [Rust Crate Recipes](/agents/crate-recipes/), or fetch [`/llms.txt`](/llms.txt) / [`/llms-full.txt`](/llms-full.txt) directly.
