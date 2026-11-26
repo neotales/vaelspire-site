@@ -91,10 +91,11 @@ Embedded UI (`--features embed-ui` + `--ui-mode embedded`):
 
 ---
 
-## 5. Planned Architecture Milestones (Pre-v0.1.0 & M4–M4.5)
+## 5. Shipped M3.5, M4 & M4.5 Endpoints, CLI & Edge Deployments
 
-- **GDPR & Log Redaction:** Log `user_id` + masked email (`wf******@domain.com`, configurable `masked|id-only|full`), Right to Erasure preserving append-only `auth_audit` via pseudonymous `actor_id`, Right of Access JSON export, IP retention/truncation (`/24` IPv4, `/48` IPv6), expanded bounded-cardinality `/metrics`.
-- **Sessions & Anomaly Detection:** Sliding (`session_idle_timeout` + throttled `session_refresh_window`) AND hard absolute (`session_absolute_timeout`) session expirations; explicit `--ip-source` + `--trusted-proxies`; per-IP password-spray, unseen device/IP, refresh-token reuse, and optional GeoLite2 impossible-travel alerts.
-- **Passkeys, Per-App RBAC & Management CLI:** Wire `passkey` feature + `--rp-id`/`--rp-origin` into server & SvelteKit UI; nullable `app_id` on roles & permissions + `auth_role_permission` + `auth_group_role`; dual-mode (local DB & remote API) CLI for `user`, `org`, `client`, `role`, `perm`, `group`, `api-key`, `audit`, `status`.
-- **Self-Service Org IdP & Directory Sync:** DNS-verified domains, per-org email policies (`allow_public`, `business_domains_only`, `verified_domains_only`), Home Realm Discovery, delegated org SSO portal (OIDC/SAML + test mode + break-glass admin), and SCIM 2.0 `/scim/v2/Groups`.
-- **Cloudflare & Kubernetes:** `wasm32`-clean `vaelspire-core`/`vaelspire-verify`, Cloudflare D1 `AuthStore` (`vaelspire-store-d1`) + Workers edge runtime for low-cost serverless hosting, Cloudflare Containers for native static binary, plus official Helm chart & Kubernetes manifests.
+- **GDPR & Privacy (`vaelspire_core::privacy`):** `PiiLogMode` (`masked`: `wf******@domain.com`, `id-only`, `full`), `AuditIpMode` (`full`, `truncated` `/24`/`/48`, `none`), `GET /account/export`, `DELETE /account/erase`, `POST /admin/gdpr/erase/{id}`.
+- **Sessions & Anomaly Detection:** `Policy::{session_sliding, session_ttl, session_max_lifetime}` (`--session-fixed`, `--session-idle-secs`, `--session-max-secs`); `--ip-source direct|x-forwarded-for|cf-connecting-ip|forwarded` + `--trusted-proxies` CIDRs; Core `AnomalyDetector` (`password_spray`, `new_device_or_ip`, `refresh_token_reuse`).
+- **Per-App RBAC (`/admin/rbac/*`):** `roles`, `permissions`, `roles/{r}/permissions/{p}`, `groups`, `groups/{g}/members/{u}`, `groups/{g}/roles/{r}`, `users/{u}/roles/{r}`, `users/{u}/effective?app_id=...`; projects `X-Vaelspire-Roles` & `X-Vaelspire-Groups` on `/forward-auth` and `roles`/`groups`/`permissions` on `/oauth2/userinfo`.
+- **Self-Service Org SSO & SCIM Groups:** `GET/PUT /org/portal/policy` (`allow_public`, `business_domains_only`, `verified_domains_only`), `GET/POST /org/portal/domains` + `/verify`, `GET/POST/DELETE /org/portal/idps` + `/test`, `POST /org/portal/scim-tokens` (`vs_scim_...`), `POST /auth/discover` (Home Realm Discovery), `GET/POST/PATCH/DELETE /scim/v2/Groups` & `PATCH /scim/v2/Users/{id}`.
+- **Passkeys & CLI:** `--features passkey` (`--rp-id`, `--rp-origin`) + browser WebAuthn in `/ui/account` & `/ui/login`; CLI subcommands `vaelspire {serve, migrate, keygen, admin, user, org, rbac, audit}`.
+- **Cloudflare & Kubernetes:** `crates/vaelspire-store-d1` (`wasm32`-clean), `deploy/cloudflare/{worker,containers}`, and `deploy/helm/vaelspire/` Helm chart.

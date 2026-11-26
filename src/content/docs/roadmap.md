@@ -36,65 +36,41 @@ Vaelspire is built in focused, shippable milestones — **dogfooding our own app
   - OIDC Client Registry (`/admin/oidc/clients`) with exact-match redirect URIs and keyed BLAKE3 secrets for **Vaelsgard** and third-party SSO
   - Thin zero-DB stateless JWKS verifier crate (`vaelspire-verify`, `wasm32`-clean)
 - **Embedded Web UI (`ui/` + `--features embed-ui`) & External UI Mode:**
-  - SvelteKit (`adapter-static`) + Tailwind console (Overview, Login, Register, OIDC Consent, Account/Sessions/API Keys, Core Admin Console)
+  - SvelteKit (`adapter-static`) + Tailwind console (Overview, Login, Register, OIDC Consent, Account/Passkeys/GDPR, Admin, Org SSO, RBAC)
   - Runtime `--ui-mode embedded|external|api-only` toggle for Core vs. Enterprise CDN deployments
 - **Desktop Companion Architecture (`apps/vaelspire-desktop`):**
   - Isolated **Rune** (`anomalyco/rune`) desktop companion specification cleanly separated from the headless server binary *(implementation tracks Rune's upstream pre-release stabilization)*
 
 ---
 
-## 🔨 M3.5 — Production Hardening, GDPR Auditing, Passkeys, Per-App RBAC & Full CLI *(Next — Pre-`v0.1.0`)*
+## ✅ M3.5 — Production Hardening, GDPR Auditing, Passkeys, Per-App RBAC & Full CLI *(Shipped)*
 
-Everything required so `v0.1.0` is production-grade with zero large rewrites later:
-
-### Auditing, Log Levels, GDPR, Anomaly Detection & Metrics
-- **PII-Safe Redacted Logging:** Always log `user_id` (`UUIDv7`) + redacted email (`wf******@domain.com`, showing only leading characters + domain) via configurable log policy (`masked`, `id-only`, or `full` for local dev). Strict log-level hygiene (`ERROR`, `WARN`, `INFO`, `DEBUG`/`TRACE`) with zero secrets/tokens ever logged.
-- **GDPR Compliance:** Right to Erasure (`DELETE /user` + `vaelspire user gdpr-erase`) anonymizing `auth_user` PII while preserving append-only `auth_audit` integrity via pseudonymous `actor_id`; Right of Access data export (`GET /account/export`); configurable IP address retention & subnet truncation (`/24` IPv4, `/48` IPv6).
-- **Sliding & Hard Session Expirations:** Configurable `session_idle_timeout` (sliding extension with throttled `session_refresh_window` DB writes) + `session_absolute_timeout` (hard cap from `created_at`) + toggleable `fixed` vs. `sliding` policy.
-- **Trusted IP Collection & Anomaly Detection:** Explicit `--ip-source` (`direct`, `x-forwarded-for`, `cf-connecting-ip`, `forwarded`) + `--trusted-proxies` CIDR allow-list; per-IP password-spray/credential-stuffing detection, unseen device/IP alerts, refresh-token reuse alerts, and optional local GeoLite2 impossible-travel checks.
-- **Expanded Prometheus `/metrics`:** Bounded-cardinality counters & histograms for auth outcomes, OIDC grants, lockouts, anomalies, Argon2 duration, and active sessions (zero high-cardinality PII labels).
-
-### End-to-End Passkeys, Per-App RBAC & Operator CLI
-- **End-to-End Passkeys (WebAuthn):** Wire `passkey` feature + `--rp-id` / `--rp-origin` into `crates/vaelspire` and add WebAuthn registration & sign-in ceremonies to `/ui/account` and `/ui/login`.
-- **Full RBAC (Org-Wide & Per-App Roles, Groups & Permissions):**
-  - Nullable `app_id` on `auth_role` & `auth_permission` (organization-wide + per-OIDC-application roles/permissions)
-  - Permission-to-role assignment (`auth_role_permission`) and group-to-role assignment (`auth_group_role`)
-  - Effective role/group/permission resolution projected cleanly into OIDC JWT claims and `/forward-auth` headers
-- **Persistence & Postgres Parity:** Persist OIDC clients in `AuthStore` and wire `--database-url postgres://...` into `vaelspire serve` and `vaelspire migrate` alongside SQLite.
-- **Full Operator Management CLI (`vaelspire`):** Local direct-DB mode AND remote HTTP API profile mode covering `user`, `org`, `client`, `role`, `perm`, `group`, `api-key`, `audit`, and `status`.
+- ✅ **PII-Safe Redacted Logging:** `vaelspire_core::privacy` logs `user_id` (`UUIDv7`) + redacted email (`wf******@domain.com`) via `--pii-log-mode masked|id-only|full` with strict log-level hygiene.
+- ✅ **GDPR Compliance:** Right to Erasure (`DELETE /account/erase`, `POST /admin/gdpr/erase/{id}`, `vaelspire user gdpr-erase`) anonymizing PII (`erased-<id>@deleted.invalid`) while preserving append-only `auth_audit`; Right of Access JSON export (`GET /account/export`, `vaelspire user export`); IP subnet truncation (`--audit-ip-mode full|truncated|none`).
+- ✅ **Sliding & Hard Session Expirations:** Configurable `session_sliding` / `--session-fixed`, `--session-idle-secs`, and `--session-max-secs` enforced via `UUIDv7` creation timestamp in `vaelspire-auth::Policy`.
+- ✅ **Trusted IP Collection & Anomaly Detection:** Explicit `--ip-source` (`direct`, `x-forwarded-for`, `cf-connecting-ip`, `forwarded`) + `--trusted-proxies` CIDR allow-list; Core `AnomalyDetector` (password spray, unseen device/subnet, OIDC refresh-token reuse) and expanded bounded-cardinality `/metrics`.
+- ✅ **End-to-End Passkeys (WebAuthn):** Wired `--features passkey`, `--rp-id` / `--rp-origin`, and browser WebAuthn registration & sign-in flows into `/ui/account` and `/ui/login`.
+- ✅ **Full RBAC (Org-Wide & Per-App Roles, Groups & Permissions):** Nullable `app_id` on `vs_app_role` & `vs_app_permission`, permission-to-role & group-to-role grants, `/admin/rbac/*` endpoints, `/ui/rbac` console, and projection into OIDC UserInfo & `/forward-auth` (`X-Vaelspire-Roles`, `X-Vaelspire-Groups`).
+- ✅ **Persistent OIDC Clients & Operator CLI (`vaelspire`):** Persisted OIDC clients in `vs_oidc_client` + full CLI subcommands (`user`, `org`, `rbac`, `audit`, `admin`, `serve`, `migrate`, `keygen`).
+- 🧭 *Remaining pre-`v0.1.0` polish:* Wire `--database-url postgres://...` directly into `vaelspire serve` and `vaelspire migrate` alongside SQLite.
 
 ---
 
-## 🧭 M4 — Self-Service Org IdP, Domain Policies, Directory Sync & Standards Conformance
+## ✅ M4 — Self-Service Org IdP, Domain Policies, Directory Sync & NHI *(Core Shipped)*
 
-- **Self-Service Organization / Client IdP Portal:** Delegated org admin portal (`/ui/org/sso`) letting customer organizations self-configure upstream **OIDC** or **SAML 2.0** IdPs, test connections in dry-run mode, map IdP claims to Vaelspire groups/roles, enable JIT provisioning, and maintain a break-glass local admin bypass.
-- **Domain Verification & Email Policies:** DNS TXT verification (`_vaelspire-verify.<domain>`) + per-organization signup policies:
-  - `allow_public` (allow consumer providers like Gmail/Outlook/iCloud)
-  - `business_domains_only` (block free/disposable consumer email domains)
-  - `verified_domains_only` (restrict strictly to verified org domains + automatic **Home Realm Discovery**)
-- **Directory Sync (SCIM 2.0):**
-  - ✅ Shipped: `/scim/v2/ServiceProviderConfig` and `/scim/v2/Users` (list, create, fetch, soft-delete)
-  - 🧭 Next: `/scim/v2/Groups` sync, per-org scoped SCIM bearer tokens (Okta, Entra ID, Google Workspace, JumpCloud), and instant session/token revocation on offboarding
-- **Non-Human Identity (NHI) / AI Agents:**
-  - ✅ Shipped: OAuth 2.0 `client_credentials` with strict `allowed_scopes` attenuation
-  - 🧭 Next: Delegated agent chains and per-workload policy budgets
-- **SAML 2.0 & OpenID Conformance:**
-  - ✅ Shipped: `/saml/metadata` (`EntityDescriptor` XML)
-  - 🧭 Next: Full signed SAML 2.0 assertions + automated OpenID Foundation OIDC Conformance Suite in CI with published badge
-- **Brand Identity:** Official fantasy **Spire & Dragon** vector logo and wordmark lockups
+- ✅ **Self-Service Organization / Client IdP Portal:** `/org/portal/{policy,domains,idps,scim-tokens}` + `/ui/org` console for upstream **OIDC** or **SAML 2.0** IdPs, dry-run validation (`POST /org/portal/idps/{id}/test`), JIT provisioning, group claim mapping, and break-glass local admin toggle.
+- ✅ **Domain Verification & Email Policies:** DNS TXT verification (`_vaelspire-verify.<domain>`) + per-organization email policies (`allow_public`, `business_domains_only`, `verified_domains_only`) + Home Realm Discovery (`POST /auth/discover`).
+- ✅ **Directory Sync (SCIM 2.0 Users & Groups):** `/scim/v2/ServiceProviderConfig`, `/scim/v2/Users` (with `PATCH active=false` immediate session revocation), `/scim/v2/Groups` (RFC 7644 `PatchOp` member sync), and per-org scoped `vs_scim_...` bearer tokens.
+- ✅ **Non-Human Identity (NHI) & SAML Metadata:** OAuth 2.0 `client_credentials` with strict `allowed_scopes` attenuation + `/saml/metadata`.
+- 🧭 *Next:* Full signed SAML 2.0 assertions, OpenID Foundation OIDC Conformance Suite in CI, and commissioning the official fantasy **Spire & Dragon** vector logo.
 
 ---
 
-## 🌐 M4.5 — Low-Cost Edge (Cloudflare Workers + D1 / Containers) & Kubernetes
+## ✅ M4.5 — Low-Cost Edge (Cloudflare Workers + D1 / Containers) & Kubernetes *(Foundations Shipped)*
 
-- **Cloudflare Workers + D1 (`vaelspire-store-d1`):**
-  - Keep `vaelspire-core` and `vaelspire-verify` strictly pure-Rust & `wasm32`-clean
-  - Implement a **Cloudflare D1** `AuthStore` adapter and edge Worker entrypoint (with WebCrypto/configurable KDF or hybrid hashing offload to respect Worker CPU/128 MB isolate limits) for ultra-low-cost serverless hosting
-- **Cloudflare Containers & Hybrid Edge:**
-  - Official deployment config running the native Linux static `vaelspire` binary on **Cloudflare Containers** (full SIMD Argon2id, Passkeys, OIDC, embedded UI) paired with an optional `vaelspire-verify` Wasm Worker for sub-millisecond edge JWT validation across Cloudflare's global PoPs
-- **Containers & Kubernetes (K8s):**
-  - Hardened minimal OCI container images (distroless/scratch)
-  - Official **Helm chart** (PostgreSQL HA, HPA autoscaling, PodDisruptionBudgets, NetworkPolicies, Prometheus `ServiceMonitor`) and future Kubernetes operator CRDs for declarative org/client management
+- ✅ **Cloudflare D1 Store Crate (`crates/vaelspire-store-d1`):** Pure-Rust, zero-native-C, `wasm32`-clean `AuthStore` adapter (`D1Store`, `D1Client`, `D1_SCHEMA_SQL`).
+- ✅ **Cloudflare Workers + Containers Templates (`deploy/cloudflare/`):** Workers + D1 template (`wrangler.toml`, `schema.sql`, edge gateway) and Cloudflare Containers (`wrangler.jsonc` running `deploy/Dockerfile` with `--ip-source cf-connecting-ip`).
+- ✅ **Kubernetes Helm Chart (`deploy/helm/vaelspire/`):** Hardened non-root Deployment, Service, Ingress, HPA (`autoscaling/v2`), PodDisruptionBudget, NetworkPolicy, Secret, and Prometheus `ServiceMonitor`.
 
 ---
 

@@ -15,7 +15,8 @@ Vaelspire is structured as a modular Rust 2024 workspace (`#![forbid(unsafe_code
 | **`vaelspire-email`** | Async email delivery abstractions & SMTP/memory transports for verification, password reset, and OTP codes. | `Mailer`, `MemoryMailer`, `SmtpMailer` |
 | **`vaelspire-store-sqlite`** | Embedded SQLite adapter over `neotales-dbapi-sqlite` with embedded migrations and full `conformance.rs` compliance. | `SqliteStore`, `open()` |
 | **`vaelspire-store-postgres`** | Production PostgreSQL adapter over `neotales-dbapi-postgres` passing the exact same black-box `conformance.rs` suite. | `PostgresStore` |
-| **`vaelspire-verify`** | Ultra-thin, zero-database `EdDSA` (`Ed25519`) JWT & RFC 7517 JWKS verifier for downstream microservices. | `TokenVerifier`, `Jwks`, `Jwk`, `VerifiedClaims`, `Audience`, `VerifyError` |
+| **`vaelspire-store-d1`** | Pure-Rust, zero-native-C, `wasm32`-clean **Cloudflare D1** `AuthStore` adapter for ultra-low-cost serverless edge deployments. | `D1Store`, `D1Client`, `D1Value`, `D1_SCHEMA_SQL` |
+| **`vaelspire-verify`** | Ultra-thin, zero-database `EdDSA` (`Ed25519`) JWT & RFC 7517 JWKS verifier (`wasm32`-clean) for downstream microservices & Cloudflare Workers. | `TokenVerifier`, `Jwks`, `Jwk`, `VerifiedClaims`, `Audience`, `VerifyError` |
 | **`vaelspire-oidc`** | Full OIDC 1.0 & OAuth 2.0 Identity Provider: Discovery, rotating `Ed25519` JWKS (RFC 7638 thumbprints), Auth Code + PKCE `S256`, Refresh Token Rotation + family reuse detection, NHI `client_credentials`, UserInfo, Introspect, Revoke. | `OidcProvider`, `OidcProviderConfig`, `OidcClient`, `ClientKind`, `TokenResponse` |
 | **`vaelspire`** | Single-binary `clap` CLI (`serve`, `migrate`, `keygen`, `admin bootstrap`) + Axum HTTP server wiring all auth, OIDC, SCIM 2.0, SAML metadata, `/forward-auth`, `/metrics`, and optional `--features embed-ui` SvelteKit assets. | `ServerConfig`, `UiMode`, `build_router()`, `serve()` |
 

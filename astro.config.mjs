@@ -7,7 +7,7 @@ export default defineConfig({
     starlight({
       title: 'Vaelspire',
       description:
-        'Ultra-lightweight Rust open-core identity and authentication platform by Neotales — embeddable crates, single-binary OIDC 1.0 IdP & /forward-auth server, embedded Web UI, and Enterprise geo-replication & WORM compliance.',
+        'Ultra-lightweight Rust open-core identity and authentication platform by Neotales — embeddable crates, single-binary OIDC 1.0 IdP & /forward-auth server, Passkeys, per-app RBAC, Cloudflare D1/Containers, Kubernetes, and Enterprise WORM compliance.',
       favicon: '/favicon.svg',
       customCss: ['./src/styles/vaelspire.css'],
       social: [
@@ -23,7 +23,9 @@ export default defineConfig({
           items: [
             { label: '60-Second Quickstart', slug: 'getting-started/quickstart' },
             { label: 'Configuration & CLI', slug: 'getting-started/configuration' },
+            { label: 'Operator CLI Reference', slug: 'guides/cli-reference' },
             { label: 'Deployment & Reverse Proxies', slug: 'getting-started/deployment' },
+            { label: 'Cloudflare (D1/Containers) & K8s', slug: 'guides/cloudflare-and-k8s' },
             { label: 'How Vaelspire Compares', slug: 'guides/comparisons' },
           ],
         },
@@ -31,7 +33,9 @@ export default defineConfig({
           label: 'Core Platform Guides',
           items: [
             { label: 'OIDC 1.0 IdP & SSO', slug: 'guides/oidc-idp' },
+            { label: 'Per-App RBAC & Org SSO', slug: 'guides/rbac-and-organizations' },
             { label: 'SCIM 2.0, SAML & AI Agents', slug: 'guides/scim-and-nhi' },
+            { label: 'GDPR, Redaction & Anomaly Detection', slug: 'guides/gdpr-and-auditing' },
             { label: 'Forward-Auth Integration', slug: 'guides/forward-auth' },
             { label: 'Embedded Web UI & Desktop', slug: 'guides/web-ui' },
             { label: 'Embeddable Rust Crates', slug: 'guides/embedded-crates' },

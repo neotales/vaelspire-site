@@ -1,16 +1,20 @@
 # Vaelspire — Open-Core Rust Identity & Auth Platform by Neotales
 
-> Ultra-lightweight Rust identity & authentication platform: 9 MIT Open-Core embeddable crates + single-binary OIDC 1.0 IdP / `/forward-auth` / SCIM 2.0 / embedded SvelteKit UI server + isolated Enterprise workspace (offline Ed25519 licensing, WORM hash-chained audit storage, SIEM/OTLP telemetry, multi-region residency).
+> Ultra-lightweight Rust identity & authentication platform: 10 MIT Open-Core embeddable crates (including Cloudflare D1 `vaelspire-store-d1`) + single-binary OIDC 1.0 IdP / Passkeys / Per-App RBAC / Self-Service Org SSO / SCIM 2.0 Users & Groups / GDPR / `/forward-auth` / embedded SvelteKit UI server + Cloudflare/Kubernetes deployments + isolated Enterprise workspace.
 
 ## Key Documentation URLs
 
 - Home: https://vaelspire.dev/
 - 60-Second Quickstart: https://vaelspire.dev/getting-started/quickstart/
 - Configuration & CLI: https://vaelspire.dev/getting-started/configuration/
+- Operator CLI Reference: https://vaelspire.dev/guides/cli-reference/
 - Deployment & Reverse Proxies: https://vaelspire.dev/getting-started/deployment/
+- Cloudflare (D1 / Workers / Containers) & Kubernetes: https://vaelspire.dev/guides/cloudflare-and-k8s/
 - How Vaelspire Compares: https://vaelspire.dev/guides/comparisons/
 - OIDC 1.0 IdP & SSO: https://vaelspire.dev/guides/oidc-idp/
+- Per-App RBAC, Self-Service Org SSO & SCIM Groups: https://vaelspire.dev/guides/rbac-and-organizations/
 - SCIM 2.0, SAML & AI Agents (NHI): https://vaelspire.dev/guides/scim-and-nhi/
+- GDPR, Redaction, Sessions & Anomaly Detection: https://vaelspire.dev/guides/gdpr-and-auditing/
 - Forward-Auth Integration: https://vaelspire.dev/guides/forward-auth/
 - Embedded Web UI & Desktop Companion: https://vaelspire.dev/guides/web-ui/
 - Embeddable Rust Crates: https://vaelspire.dev/guides/embedded-crates/
@@ -25,7 +29,7 @@
 
 - Agent Orientation & Invariants: https://vaelspire.dev/agents/
 - HTTP & CLI Contract: https://vaelspire.dev/agents/api-reference/
-- OIDC, SCIM, UI & Enterprise Contract: https://vaelspire.dev/agents/oidc-and-scim/
+- OIDC, SCIM, RBAC, Org SSO & Enterprise Contract: https://vaelspire.dev/agents/oidc-and-scim/
 - Rust Crate Recipes: https://vaelspire.dev/agents/crate-recipes/
 - Full Single-File Context: https://vaelspire.dev/llms-full.txt
 
