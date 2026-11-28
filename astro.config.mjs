@@ -36,6 +36,7 @@ export default defineConfig({
             { label: 'Per-App RBAC & Org SSO', slug: 'guides/rbac-and-organizations' },
             { label: 'SCIM 2.0, SAML & AI Agents', slug: 'guides/scim-and-nhi' },
             { label: 'GDPR, Redaction & Anomaly Detection', slug: 'guides/gdpr-and-auditing' },
+            { label: 'Multi-Sink Security Alerting', slug: 'guides/alerts' },
             { label: 'Forward-Auth Integration', slug: 'guides/forward-auth' },
             { label: 'Embedded Web UI & Desktop', slug: 'guides/web-ui' },
             { label: 'Embeddable Rust Crates', slug: 'guides/embedded-crates' },

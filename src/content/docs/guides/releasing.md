@@ -16,7 +16,7 @@ Before any `vX.Y.Z` tag is cut in [`neotales/vaelspire`](https://github.com/neot
 5. **All Verification Gates Green:**
    - `cargo fmt --all -- --check`
    - `cargo clippy --workspace --all-targets -- -D warnings` (and `--features embed-ui`)
-   - `cargo test --workspace` (and `--features embed-ui` + `enterprise/` workspace tests)
+   - `cargo test --workspace` (and `--features passkey,embed-ui,alerts-email`)
    - `pnpm --dir ui run check && pnpm --dir ui run build`
    - `pnpm --dir ../vaelspire-site run build`
    - Live smoke verification (`scripts/smoke-test.sh` and `scripts/demo.sh`)

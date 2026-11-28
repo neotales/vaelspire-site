@@ -1,6 +1,6 @@
 # Vaelspire — Open-Core Rust Identity & Auth Platform by Neotales
 
-> Ultra-lightweight Rust identity & authentication platform: 10 MIT Open-Core embeddable crates (including Cloudflare D1 `vaelspire-store-d1`) + single-binary OIDC 1.0 IdP / Passkeys / Per-App RBAC / Self-Service Org SSO / SCIM 2.0 Users & Groups / GDPR / `/forward-auth` / embedded SvelteKit UI server + Cloudflare/Kubernetes deployments + isolated Enterprise workspace.
+> Ultra-lightweight Rust identity & authentication platform: 11 MIT Open-Core embeddable crates (including Cloudflare D1 `vaelspire-store-d1` and reusable multi-sink `vaelspire-alerts`) + single-binary OIDC 1.0 IdP / Passkeys / Per-App RBAC / Self-Service Org SSO / SCIM 2.0 Users & Groups / GDPR / `/forward-auth` / embedded SvelteKit UI server + Cloudflare/Kubernetes deployments. Proprietary Enterprise modules live in a separate private repository (`neotales/vaelspire-enterprise`).
 
 ## Key Documentation URLs
 
@@ -15,6 +15,7 @@
 - Per-App RBAC, Self-Service Org SSO & SCIM Groups: https://vaelspire.dev/guides/rbac-and-organizations/
 - SCIM 2.0, SAML & AI Agents (NHI): https://vaelspire.dev/guides/scim-and-nhi/
 - GDPR, Redaction, Sessions & Anomaly Detection: https://vaelspire.dev/guides/gdpr-and-auditing/
+- Multi-Sink Security Alerting (`vaelspire-alerts`): https://vaelspire.dev/guides/alerts/
 - Forward-Auth Integration: https://vaelspire.dev/guides/forward-auth/
 - Embedded Web UI & Desktop Companion: https://vaelspire.dev/guides/web-ui/
 - Embeddable Rust Crates: https://vaelspire.dev/guides/embedded-crates/
@@ -35,5 +36,6 @@
 
 ## Repositories
 
-- Core + Enterprise Monorepo: https://github.com/neotales/vaelspire (default branch: `dev`)
+- Open-Core (100% MIT): https://github.com/neotales/vaelspire (default branch: `dev`)
 - Docs & Marketing Site: https://github.com/neotales/vaelspire-site (default branch: `dev`)
+- Enterprise (Private Commercial Repo): `neotales/vaelspire-enterprise`

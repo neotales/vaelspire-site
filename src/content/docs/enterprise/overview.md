@@ -33,7 +33,7 @@ Self-hosted Enterprise uses **offline-verifiable Ed25519-signed license files** 
 ### 🛡️ Revenue-Funded Audits & FIPS 140-3
 Formal third-party penetration tests, SOC 2 Type II / ISO 27001 packages, and FIPS 140-3 validated builds are packaged under Vaelspire Enterprise so regulated organizations get attested artifacts and guaranteed CVE SLAs without inflating the cost of Open-Core.
 
-## Licensing Split
+## Repository & Licensing Split
 
-- **Open-Core** (`/` outside `enterprise/`): **MIT License** (`LICENSE`)
-- **Enterprise** (`enterprise/` and Enterprise-marked modules): **Vaelspire Enterprise License** (`LICENSE-ENTERPRISE`) — free to inspect and evaluate in non-production environments; commercial license required for production deployment.
+- **Open-Core (`neotales/vaelspire`):** **100% MIT License** (`LICENSE`) — public repository containing zero proprietary code.
+- **Enterprise (`neotales/vaelspire-enterprise`):** **Vaelspire Enterprise License** — completely separate private commercial repository implementing `vaelspire-core::extensions`.

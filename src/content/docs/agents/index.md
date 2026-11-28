@@ -10,7 +10,7 @@ description: Dense, zero-fluff reference for coding agents integrating, extendin
 - **Repo:** `github.com/neotales/vaelspire` | **Default branch:** `dev` (`main`/`master` do not exist).
 - **Rust:** `1.100.0`, edition `2024`, workspace resolver `3`.
 - **Workspace lints:** `unsafe_code = "forbid"`, `missing_docs = "warn"`, `clippy::all = "warn"`, `clippy::pedantic = "warn"`.
-- **Licenses:** Root `LICENSE` = MIT (Open-Core). `LICENSE-ENTERPRISE` = proprietary commercial license governing `enterprise/`.
+- **License:** Entire `neotales/vaelspire` repository is 100% MIT (`LICENSE`). Proprietary Enterprise modules live separately in private repo `neotales/vaelspire-enterprise`.
 - **Database abstraction:** `neotales-dbapi = "=0.0.0-alpha.0"` and `neotales-migration = "=0.0.0-alpha.0"` (crates.io). Do **not** expose `sqlx` in public APIs.
 
 ## 2. Crate Dependency Graph

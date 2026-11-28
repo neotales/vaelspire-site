@@ -49,6 +49,7 @@ Vaelspire is built in focused, shippable milestones — **dogfooding our own app
 - ✅ **GDPR Compliance:** Right to Erasure (`DELETE /account/erase`, `POST /admin/gdpr/erase/{id}`, `vaelspire user gdpr-erase`) anonymizing PII (`erased-<id>@deleted.invalid`) while preserving append-only `auth_audit`; Right of Access JSON export (`GET /account/export`, `vaelspire user export`); IP subnet truncation (`--audit-ip-mode full|truncated|none`).
 - ✅ **Sliding & Hard Session Expirations:** Configurable `session_sliding` / `--session-fixed`, `--session-idle-secs`, and `--session-max-secs` enforced via `UUIDv7` creation timestamp in `vaelspire-auth::Policy`.
 - ✅ **Trusted IP Collection & Anomaly Detection:** Explicit `--ip-source` (`direct`, `x-forwarded-for`, `cf-connecting-ip`, `forwarded`) + `--trusted-proxies` CIDR allow-list; Core `AnomalyDetector` (password spray, unseen device/subnet, OIDC refresh-token reuse) and expanded bounded-cardinality `/metrics`.
+- ✅ **Reusable Multi-Sink Alerting (`vaelspire-alerts`):** Zero-Vaelspire-coupling MIT alert router supporting **Webhook (HMAC-SHA256)**, **Slack**, **Discord**, **Microsoft Teams**, **Gotify**, **ntfy**, **Twilio/Generic SMS**, and **SMTP Email**, wired into Vaelspire anomaly/GDPR events and `vaelspire alert test` *(planned for future extraction into a standalone generic `neotales-alerts` crate)*.
 - ✅ **End-to-End Passkeys (WebAuthn):** Wired `--features passkey`, `--rp-id` / `--rp-origin`, and browser WebAuthn registration & sign-in flows into `/ui/account` and `/ui/login`.
 - ✅ **Full RBAC (Org-Wide & Per-App Roles, Groups & Permissions):** Nullable `app_id` on `vs_app_role` & `vs_app_permission`, permission-to-role & group-to-role grants, `/admin/rbac/*` endpoints, `/ui/rbac` console, and projection into OIDC UserInfo & `/forward-auth` (`X-Vaelspire-Roles`, `X-Vaelspire-Groups`).
 - ✅ **Persistent OIDC Clients & Operator CLI (`vaelspire`):** Persisted OIDC clients in `vs_oidc_client` + full CLI subcommands (`user`, `org`, `rbac`, `audit`, `admin`, `serve`, `migrate`, `keygen`).
@@ -74,9 +75,9 @@ Vaelspire is built in focused, shippable milestones — **dogfooding our own app
 
 ---
 
-## ✅ M5 — Vaelspire Enterprise Foundations (`enterprise/`) *(Core Modules Implemented)*
+## ✅ M5 — Vaelspire Enterprise Foundations *(Separate Private Repo: `neotales/vaelspire-enterprise`)*
 
-Isolated proprietary Cargo workspace (`enterprise/Cargo.toml`, governed by `LICENSE-ENTERPRISE`) implementing `vaelspire-core::extensions`:
+Proprietary commercial Cargo workspace maintained completely separately from the 100% MIT `neotales/vaelspire` repo, implementing `vaelspire-core::extensions`:
 
 - ✅ **`vaelspire-license`:** Offline Ed25519 `.vlic` signing & verification (`LicenseGate`) with guaranteed **never-brick-logins** graceful expiry (`allows_login() == true` always)
 - ✅ **`vaelspire-worm`:** Tamper-evident SHA-256 hash-chained `AuditSink` + chain verifier + cloud Object Lock payload builders (**AWS S3 Object Lock**, **Azure Immutable Blob**, **GCS Bucket Lock**)

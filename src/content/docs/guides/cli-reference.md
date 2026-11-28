@@ -72,3 +72,16 @@ vaelspire rbac effective --sqlite ./vaelspire.sqlite --user-id <USER_ID> --app-i
 ```bash
 vaelspire audit tail --sqlite ./vaelspire.sqlite --limit 50
 ```
+
+## Multi-Sink Alert Diagnostics (`vaelspire alert`)
+
+```bash
+# Test a single sink via CLI/env flags
+vaelspire alert test \
+  --severity warn \
+  --alert-gotify-url https://gotify.example.com \
+  --alert-gotify-token "$GOTIFY_APP_TOKEN"
+
+# Or test a full declarative multi-sink config (Webhook, Slack, Discord, Teams, Gotify, ntfy, SMS, Email)
+vaelspire alert test --alerts-config /etc/vaelspire/alerts.json --severity critical
+```

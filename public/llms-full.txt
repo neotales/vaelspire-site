@@ -6,8 +6,8 @@ Repos:
 - https://github.com/neotales/vaelspire-site (branch: dev)
 
 Licensing:
-- Open-Core (`crates/`, `ui/`, `scripts/`, `deploy/`): MIT (`LICENSE`). 100% free core security (zero SSO tax).
-- Enterprise (`enterprise/`): Proprietary (`LICENSE-ENTERPRISE`), isolated Cargo workspace (`enterprise/Cargo.toml`).
+- Open-Core (`neotales/vaelspire`): 100% MIT (`LICENSE`). Zero proprietary code in the public repo.
+- Enterprise (`neotales/vaelspire-enterprise`, separate private repo): Proprietary commercial license implementing `vaelspire-core::extensions`.
 
 Toolchain & Standards:
 - Rust 1.100, edition 2024, workspace resolver 3, `#![forbid(unsafe_code)]`, `clippy::pedantic`, `missing_docs`.
@@ -82,7 +82,7 @@ Embedded UI (`--features embed-ui` + `--ui-mode embedded`):
 
 ---
 
-## 4. Isolated Enterprise Crates (`enterprise/Cargo.toml`)
+## 4. Enterprise Crates (Separate Private Repo: `neotales/vaelspire-enterprise`)
 
 - `vaelspire-license`: Offline Ed25519 `.vlic` (`vlic1.<b64-json>.<b64-sig>`) `LicenseSigner`, `verify_vlic`, `Ed25519LicenseGate: LicenseGate`. Non-bricking invariant: `allows_login()` ALWAYS returns `true` even on `GracePeriod` or invalid signature.
 - `vaelspire-worm`: `WormAuditSink: AuditSink` with SHA-256 hash-chaining (`ChainedAuditRecord`, `verify_chain`) + `build_archive` for `S3ObjectLock`, `AzureImmutableBlob`, `GcsBucketLock`.
@@ -97,5 +97,5 @@ Embedded UI (`--features embed-ui` + `--ui-mode embedded`):
 - **Sessions & Anomaly Detection:** `Policy::{session_sliding, session_ttl, session_max_lifetime}` (`--session-fixed`, `--session-idle-secs`, `--session-max-secs`); `--ip-source direct|x-forwarded-for|cf-connecting-ip|forwarded` + `--trusted-proxies` CIDRs; Core `AnomalyDetector` (`password_spray`, `new_device_or_ip`, `refresh_token_reuse`).
 - **Per-App RBAC (`/admin/rbac/*`):** `roles`, `permissions`, `roles/{r}/permissions/{p}`, `groups`, `groups/{g}/members/{u}`, `groups/{g}/roles/{r}`, `users/{u}/roles/{r}`, `users/{u}/effective?app_id=...`; projects `X-Vaelspire-Roles` & `X-Vaelspire-Groups` on `/forward-auth` and `roles`/`groups`/`permissions` on `/oauth2/userinfo`.
 - **Self-Service Org SSO & SCIM Groups:** `GET/PUT /org/portal/policy` (`allow_public`, `business_domains_only`, `verified_domains_only`), `GET/POST /org/portal/domains` + `/verify`, `GET/POST/DELETE /org/portal/idps` + `/test`, `POST /org/portal/scim-tokens` (`vs_scim_...`), `POST /auth/discover` (Home Realm Discovery), `GET/POST/PATCH/DELETE /scim/v2/Groups` & `PATCH /scim/v2/Users/{id}`.
-- **Passkeys & CLI:** `--features passkey` (`--rp-id`, `--rp-origin`) + browser WebAuthn in `/ui/account` & `/ui/login`; CLI subcommands `vaelspire {serve, migrate, keygen, admin, user, org, rbac, audit}`.
+- **Passkeys, Alerts & CLI:** `--features passkey` (`--rp-id`, `--rp-origin`) + browser WebAuthn in `/ui/account` & `/ui/login`; reusable `vaelspire-alerts` crate (Webhook + HMAC-SHA256, Slack, Discord, Teams, Gotify, ntfy, Twilio/Generic SMS, SMTP Email; planned for future extraction to `neotales-alerts`); CLI subcommands `vaelspire {serve, migrate, keygen, admin, user, org, rbac, audit, alert}`.
 - **Cloudflare & Kubernetes:** `crates/vaelspire-store-d1` (`wasm32`-clean), `deploy/cloudflare/{worker,containers}`, and `deploy/helm/vaelspire/` Helm chart.

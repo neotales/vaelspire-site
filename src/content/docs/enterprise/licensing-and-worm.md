@@ -3,7 +3,7 @@ title: Enterprise Architecture — WORM, Geo-Rep & Offline Licensing
 description: Technical architecture of Vaelspire Enterprise modules (vaelspire-license, vaelspire-worm, vaelspire-telemetry, vaelspire-georep) implementing vaelspire-core::extensions.
 ---
 
-Vaelspire Enterprise is packaged in a completely separate Cargo workspace (`enterprise/`) governed by `LICENSE-ENTERPRISE`. The MIT Open-Core crates in `crates/` never depend on `enterprise/`; instead, Enterprise crates implement the five extension traits in `vaelspire_core::extensions`.
+Vaelspire Enterprise lives in a completely separate **private repository** (`neotales/vaelspire-enterprise`) with its own Cargo workspace and commercial license. The 100% MIT Open-Core repository (`neotales/vaelspire`) never mixes in proprietary code or depends on Enterprise crates; instead, Enterprise crates implement the five extension traits in `vaelspire_core::extensions`.
 
 ## 1. Offline Ed25519 Licensing (`vaelspire-license`)
 

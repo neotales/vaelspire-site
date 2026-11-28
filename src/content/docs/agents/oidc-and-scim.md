@@ -61,4 +61,4 @@ let claims = verifier.verify(jwt, now_unix)?;
 - `TelemetrySink`: `fn record(&self, signal: TelemetrySignal)` (sync, non-blocking).
 - `RegionPolicy`: `local_region(&self) -> &str`, `home_region(&self, tenant_id: Id) -> &str`.
 - `ReplicationHook`: `async fn on_mutation(&self, event: ReplicationEvent) -> Result<(), AuthError>`.
-- Enterprise implementations live in isolated workspace `enterprise/Cargo.toml`: `vaelspire-license`, `vaelspire-worm`, `vaelspire-telemetry`, `vaelspire-georep`.
+- Enterprise implementations live in a separate private repository (`neotales/vaelspire-enterprise`): `vaelspire-license`, `vaelspire-worm`, `vaelspire-telemetry`, `vaelspire-georep`.
